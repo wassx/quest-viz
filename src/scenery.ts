@@ -37,7 +37,7 @@ export class Scenery {
 
         //  Now we can set the Milky Way as our scene’s background.
 
-        this.scene.background = background
+        // this.scene.background = background
 
 
         //  Let’s create a circular platform to “stand” on in space.

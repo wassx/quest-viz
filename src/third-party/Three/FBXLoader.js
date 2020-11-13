@@ -42,8 +42,8 @@ import {
 	VectorKeyframeTrack,
 	sRGBEncoding
 } from "three";
-import { Inflate } from "inflate.module.min";
-import { NURBSCurve } from "NURBSCurve.js";
+import { Inflate } from "./inflate.module.min";
+import {NURBSCurve} from "./NURBSCurve";
 
 /**
  * Loader loads FBX file and generates Group representing FBX scene.

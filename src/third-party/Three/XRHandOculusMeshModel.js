@@ -1,4 +1,4 @@
-import { FBXLoader } from './FBXLoader'
+import {FBXLoader} from "./FBXLoader";
 
 class XRHandOculusMeshModel {
 

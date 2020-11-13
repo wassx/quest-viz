@@ -1,6 +1,8 @@
 import {BufferGeometry, Color, Line, Scene, Vector3, WebGLRenderer, Group} from 'three';
 import {XRControllerModelFactory} from './third-party/Three/XRControllerModelFactory';
-import {ConnectedEvent, FirstShapeEvent, makeHandy, XRHandModel, XRHandModelFactory, XRHandy} from "handyjs";
+import {GLTFLoader} from "./third-party/Three/GLTFLoader";
+import {XRHandModel, XRHandModelFactory} from "./third-party/Three/XRHandModelFactory";
+import {ConnectedEvent, FirstShapeEvent, Handy, XRHandy} from "./third-party/Handy";
 
 export class Hands {
 
@@ -18,7 +20,7 @@ export class Hands {
 
     setupHands(): void {
 
-
+        let gltfLoader = new GLTFLoader();
         //  We’re about to set up HANDS,
         //  so what’s this about ‘controller0’ and controller1?
         //  You might describe this as our simplest endeavor.
@@ -31,9 +33,9 @@ export class Hands {
         //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 
         const [contoller0, controller1] = [{}, {}]
-            .map(function (controller: Group, i) {
+            .map((controller: Group, i) => {
 
-                controller = this.Hands.renderer.xr.getController(i)
+                controller = this.renderer.xr.getController(i)
                 controller.add(new Line(
                     new BufferGeometry().setFromPoints([
 
@@ -41,7 +43,7 @@ export class Hands {
                         new Vector3(0, 0, -5)
                     ])
                 ))
-                this.Hands.scene.add(controller)
+                this.scene.add(controller)
 
                 return controller
             })
@@ -54,17 +56,16 @@ export class Hands {
         //  https://en.wikipedia.org/wiki/Content_delivery_network
 
         const
-            controllerModelFactory = new XRControllerModelFactory(),
+            controllerModelFactory = new XRControllerModelFactory(gltfLoader),
             [controllerGrip0, controllerGrip1] = [{}, {}]
-                .map(function (controllerGrip: Group) {
+                .map((controllerGrip: Group) => {
 
-                    controllerGrip = this.Hands.renderer.xr.getControllerGrip(0)
+                    controllerGrip = this.renderer.xr.getControllerGrip(0)
                     controllerGrip.add(controllerModelFactory.createControllerModel(controllerGrip))
-                    this.Hands.scene.add(controllerGrip)
+                    this.scene.add(controllerGrip)
 
                     return controllerGrip
-                })
-
+                });
 
         //  And here we go -- time for virtual reality hands!!
         //  These models are not hosted on a CDN,
@@ -72,7 +73,7 @@ export class Hands {
 
         const handModelFactory = new XRHandModelFactory();
         handModelFactory.setPath('./media/hands/');
-        const cycleHandModel = function (event: FirstShapeEvent) {
+        const cycleHandModel = (event: FirstShapeEvent) => {
 
                 if (!event.hand) {
                     return;
@@ -83,7 +84,7 @@ export class Hands {
                     hand.handedness.toUpperCase(),
                     'hand.'
                 )
-                hand.models.forEach(function (model: XRHandModel) {
+                hand.models.forEach((model: XRHandModel) => {
 
                     model.visible = false
                 })
@@ -99,7 +100,7 @@ export class Hands {
 
 
         const [hand0, hand1] = [{}, {}]
-            .map(function (hand: XRHandy, i) {
+            .map((hand: XRHandy, i) => {
 
 
                 //  THREE.Renderer now wraps all of this complexity
@@ -107,8 +108,8 @@ export class Hands {
                 //  getHand() returns an empty THREE.Group instance
                 //  that you can immediately add to your scene.
 
-                hand = this.Hand.renderer.xr.getHand(i)
-                this.Hand.scene.add(hand)
+                hand = this.renderer.xr.getController(i) as XRHandy;
+                this.scene.add(hand);
 
 
                 //  So far we have an abstract model of a hand
@@ -136,13 +137,13 @@ export class Hands {
 
                 //  This is what makes detecting hand shapes easy!
 
-                makeHandy(hand)
+                Handy.makeHandy(hand)
 
 
                 //  When hand tracking data becomes available
                 //  we’ll receive this connection event.
 
-                hand.addEventListener('connected', function (event: ConnectedEvent) {
+                hand.addEventListener('connected', (event: ConnectedEvent) => {
 
                     //console.log( 'Hand tracking has begun!', event )
 
@@ -157,13 +158,13 @@ export class Hands {
                     //  it will make ALL of the above models visible.
                     //  Let’s hide them all except for the active one.
 
-                    hand.models.forEach(function (model: XRHandModel) {
+                    hand.models.forEach((model: XRHandModel) => {
 
                         hand.add(model)
                         model.visible = false
                     })
                     hand.models[hand.modelIndex].visible = true
-                })
+                });
 
 
                 //  Speaking of events, here’s how easy it is

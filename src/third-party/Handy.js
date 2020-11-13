@@ -21,8 +21,8 @@
 
 import { shapes as shapesLeft  } from './Handy-shapes-left.js'
 import { shapes as shapesRight } from './Handy-shapes-right.js'
-import * as THREE from './third-party/Three/three.module.js'
-import { SurfaceText } from './third-party/SpaceRocks/SurfaceText.js'
+import {Object3D, Vector3} from "three";
+import {SurfaceText} from "./SpaceRocks/SurfaceText";
 
 
 
@@ -142,7 +142,7 @@ const Handy = {
 	//  so let’s just create it once
 	//  and reference it from here on.
 
-	VECTOR3_ZERO: new THREE.Vector3(),
+	VECTOR3_ZERO: new Vector3(),
 
 
 	//  Here’s the data goods;
@@ -244,7 +244,7 @@ const Handy = {
 		//  SurfaceText returns a THREE.Mesh
 		//  with additional methods like print().
 
-		obj.displayFrameAnchor = new THREE.Object3D()
+		obj.displayFrameAnchor = new Object3D()
 		obj.add( obj.displayFrameAnchor )
 		obj.displayFrame = new SurfaceText({
 
