@@ -9,6 +9,7 @@ import {
 import {OrbitControls} from "./src/third-party/Three/OrbitControls";
 import {VRButton} from "./src/third-party/Three/VRButton";
 import {Scenery} from "./src/scenery";
+import {Hands} from "./src/hands";
 
 
 export class Main {
@@ -59,6 +60,8 @@ export class Main {
 
         let scenery = new Scenery(this.scene, this.camera);
         scenery.setupContent();
+        let hands = new Hands(this.renderer, this.scene);
+        hands.setupHands();
     }
 
 

@@ -11,13 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "esm": "^3.2.25",
+    "handyjs": "^1.2.2",
     "three": "^0.122.0"
   },
   "devDependencies": {
-    "live-server-https": "^0.0.2",
-    "mkdirp": "^1.0.4",
-    "ncp": "^2.0.0",
     "parcel": "^1.12.4",
     "typescript": "^4.0.5"
   }
