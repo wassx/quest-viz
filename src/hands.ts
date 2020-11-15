@@ -72,7 +72,8 @@ export class Hands {
         //  they’re included right in this code package.
 
         const handModelFactory = new XRHandModelFactory();
-        handModelFactory.setPath('./media/hands/');
+        handModelFactory.setPath('./hands/');
+
         const cycleHandModel = (event: FirstShapeEvent) => {
 
                 if (!event.hand) {

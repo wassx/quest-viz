@@ -21,7 +21,7 @@
 
 import { shapes as shapesLeft  } from './Handy-shapes-left.js'
 import { shapes as shapesRight } from './Handy-shapes-right.js'
-import {Object3D, Vector3} from "three";
+import {BoxBufferGeometry, MathUtils, Matrix4, Mesh, MeshBasicMaterial, Object3D, Vector3} from "three";
 import {SurfaceText} from "./SpaceRocks/SurfaceText";
 
 
@@ -433,7 +433,7 @@ Object.assign( Handy.protos, {
 			fingerTip.quaternion &&
 			fingerProximal.quaternion ){
 
-			return THREE.MathUtils.radToDeg( 
+			return MathUtils.radToDeg(
 
 				fingerProximal.quaternion.angleTo( fingerTip.quaternion )
 			)
@@ -532,7 +532,7 @@ Object.assign( Handy.protos, {
 			.clone()
 			.premultiply( 
 
-				new THREE.Matrix4().getInverse( wrist.matrixWorld )
+				new Matrix4().getInverse( wrist.matrixWorld )
 			)
 
 			return [ 
@@ -636,16 +636,16 @@ Object.assign( Handy.protos, {
 
 		const
 		hand  = this,
-		handRoot = new THREE.Object3D(),
+		handRoot = new Object3D(),
 		size = 0.02
 
 		shape.jointPositions
 		.forEach( function( position ){
 
-			const box = new THREE.Mesh(
+			const box = new Mesh(
 
-				new THREE.BoxBufferGeometry( size, size, size ),
-				new THREE.MeshBasicMaterial()
+				new BoxBufferGeometry( size, size, size ),
+				new MeshBasicMaterial()
 			)
 			box.position.fromArray( position ).multiplyScalar( 0.001 )
 			if( matrix !== undefined ){

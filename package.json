@@ -13,6 +13,7 @@
   "dependencies": {
     "handyjs": "^1.2.2",
     "parcel-plugin-asset-copier": "^1.1.0",
+    "regenerator-runtime": "^0.13.7",
     "three": "^0.122.0"
   },
   "devDependencies": {
