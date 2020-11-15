@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "ES5",
+    "target": "ES6",
     "declaration": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "lib": [
-      "ES5",
+      "ES6",
       "dom"
     ],
     "noImplicitAny": true,

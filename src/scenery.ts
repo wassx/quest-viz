@@ -23,7 +23,7 @@ export class Scenery {
         //  https://threejs.org/docs/#api/en/loaders/Loader
 
         const background = new CubeTextureLoader()
-            .setPath('media/milkyway/')
+            .setPath('milkyway/')
             .load([
 
                 'dark-s_px.jpg',
@@ -34,10 +34,9 @@ export class Scenery {
                 'dark-s_nz.jpg'
             ])
 
-
         //  Now we can set the Milky Way as our scene’s background.
 
-        // this.scene.background = background
+        this.scene.background = background
 
 
         //  Let’s create a circular platform to “stand” on in space.
