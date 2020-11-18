@@ -1,4 +1,4 @@
-import {BufferGeometry, Color, Line, Scene, Vector3, WebGLRenderer, Group} from 'three';
+import {BufferGeometry, Color, Line, Scene, Vector3, WebGLRenderer, Group } from 'three';
 import {XRControllerModelFactory} from './third-party/Three/XRControllerModelFactory';
 import {GLTFLoader} from "./third-party/Three/GLTFLoader";
 import {XRHandModel, XRHandModelFactory} from "./third-party/Three/XRHandModelFactory";
@@ -109,9 +109,9 @@ export class Hands {
                 //  getHand() returns an empty THREE.Group instance
                 //  that you can immediately add to your scene.
 
-                hand = this.renderer.xr.getController(i) as XRHandy;
+                hand = this.renderer.xr.getHand(i) as XRHandy;
                 this.scene.add(hand);
-
+debugger;
 
                 //  So far we have an abstract model of a hand
                 //  but we don’t have a VISUAL model of a hand!
@@ -127,7 +127,6 @@ export class Hands {
                 //  by making a fist.
 
                 hand.models = [
-
                     handModelFactory.createHandModel(hand, 'boxes'),
                     handModelFactory.createHandModel(hand, 'spheres'),
                     handModelFactory.createHandModel(hand, 'oculus', {model: 'lowpoly'}),
@@ -138,6 +137,7 @@ export class Hands {
 
                 //  This is what makes detecting hand shapes easy!
 
+                // @ts-ignore
                 Handy.makeHandy(hand)
 
 

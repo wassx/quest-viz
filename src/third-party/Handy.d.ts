@@ -1,4 +1,4 @@
-import {Group, Vector3} from "three";
+import {Group, Object3D, Vector3} from "three";
 import {XRHandModel} from "../../third-party/Three/XRHandModelFactory";
 
 export interface Handy {
@@ -26,13 +26,12 @@ export interface Handy {
 
 }
 
-
 export interface XRHandy extends Group {
     models: XRHandModel[],
     modelIndex: number,
     handedness: string,
     isDefaultColor: boolean,
-
+    joints: Group[],
     checkHandedness(): string,
 }
 
