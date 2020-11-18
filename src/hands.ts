@@ -111,7 +111,6 @@ export class Hands {
 
                 hand = this.renderer.xr.getHand(i) as XRHandy;
                 this.scene.add(hand);
-debugger;
 
                 //  So far we have an abstract model of a hand
                 //  but we don’t have a VISUAL model of a hand!
@@ -132,7 +131,7 @@ debugger;
                     handModelFactory.createHandModel(hand, 'oculus', {model: 'lowpoly'}),
                     handModelFactory.createHandModel(hand, 'oculus')
                 ]
-                hand.modelIndex = 0
+                hand.modelIndex = 2
 
 
                 //  This is what makes detecting hand shapes easy!
