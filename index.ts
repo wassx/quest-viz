@@ -12,6 +12,8 @@ import {VRButton} from "./src/third-party/Three/VRButton";
 import {Scenery} from "./src/scenery";
 import {Hands} from "./src/hands";
 import {Handy, XRHandy} from "./src/third-party/Handy";
+import {LaserCooked} from "./src/third-party/threex.laser/LaserCooked";
+import {LaserBeam} from "./src/third-party/threex.laser/LaserBeam";
 
 
 export class Main {
@@ -20,6 +22,7 @@ export class Main {
     scene: Scene;
     renderer: WebGLRenderer;
     orbitControls: OrbitControls;
+    laserCooked: LaserCooked;
 
     setupThree(): void {
         const container = document.getElementById('three')
@@ -63,6 +66,10 @@ export class Main {
         scenery.setupContent();
         let hands = new Hands(this.renderer, this.scene);
         hands.setupHands();
+
+        let laserBeam = new LaserBeam();
+        this.scene.add(laserBeam);
+        this.laserCooked = new LaserCooked(laserBeam, this.scene);
     }
 
 
@@ -77,11 +84,14 @@ const loop = (timeNow: number, frame?: XRFrame): void => {
     Handy.update((hand: XRHandy) => {
         if( hand.isShape( 'fire point', 3000 )){
 
+            if(main.laserCooked) {
+                main.laserCooked.beam.matrixWorld.setPosition(hand.position);
+            }
 
         }
     });
 
-
+    main.laserCooked.update();
     main.renderer.render(main.scene, main.camera);
 }
 

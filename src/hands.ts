@@ -84,7 +84,6 @@ export class Hands {
         handModelFactory.setPath('./hands/');
 
         const cycleHandModel = (event: FirstShapeEvent) => {
-            debugger;
                 if (!event.hand) {
                     return;
                 }
@@ -198,7 +197,6 @@ export class Hands {
                 //  for both the currently detected shape and the prior one.
 
                 hand.addEventListener('shape changed', (event: ShapeChangedEvent) => {
-debugger;
                     console.log( event.message )
                     if (event.resultIs.shape.names.includes('peace') &&
                         !event.resultWas.shape.names.includes('peace')) {
