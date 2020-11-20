@@ -11,6 +11,7 @@ import {OrbitControls} from "./src/third-party/Three/OrbitControls";
 import {VRButton} from "./src/third-party/Three/VRButton";
 import {Scenery} from "./src/scenery";
 import {Hands} from "./src/hands";
+import {Handy, XRHandy} from "./src/third-party/Handy";
 
 
 export class Main {
@@ -23,19 +24,18 @@ export class Main {
     setupThree(): void {
         const container = document.getElementById('three')
 
-        const
-            fieldOfView = 75,
-            aspectRatio = window.innerWidth / window.innerHeight,
-            near = 0.01,
-            far = 1000,
-            userHeight = 1.65
+        const fieldOfView = 75;
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        const near = 0.01;
+        const far = 1000;
+        const userHeight = 1.65;
 
         this.camera = new PerspectiveCamera(
             fieldOfView,
             aspectRatio,
             near,
             far
-        )
+        );
         this.camera.position.set(0, userHeight, 6)
 
         this.scene = new Scene()
@@ -70,7 +70,18 @@ export class Main {
 
 let main = new Main();
 
-const loop = (time: number, frame?: XRFrame): void => {
+let timePrevious: number;
+
+const loop = (timeNow: number, frame?: XRFrame): void => {
+    // @ts-ignore
+    Handy.update((hand: XRHandy) => {
+        if( hand.isShape( 'fire point', 3000 )){
+
+
+        }
+    });
+
+
     main.renderer.render(main.scene, main.camera);
 }
 

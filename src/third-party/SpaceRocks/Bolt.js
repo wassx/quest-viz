@@ -2,12 +2,9 @@
 //  Copyright © 2017, 2018, 2020 Moar Technologies Corp. See LICENSE for details.
 
 
-import * as THREE from '../Three/three.module.js'
+import {CylinderGeometry, Mesh, MeshBasicMaterial, Object3D, Quaternion, Vector3} from "three";
 
-
-
-
-function Bolt( scene, hand, joint ){
+function Bolt(scene, hand, joint ){
 
 
 	//  You can only shoot so many bolts per second.
@@ -22,13 +19,13 @@ function Bolt( scene, hand, joint ){
 
 	//  But it’s been long enough apparently, so let’s fire.
 
-	THREE.Object3D.call( this )
+	Object3D.call( this )
 	Bolt.all.push( this )
 
 
 	//  Let’s make something to look at.
 
-	const mesh = new THREE.Mesh( Bolt.geometry, Bolt.material )
+	const mesh = new Mesh( Bolt.geometry, Bolt.material )
 	mesh.rotation.x = Math.PI / -2
 
 	if( typeof hand.boltRotation === 'number' ){
@@ -38,12 +35,12 @@ function Bolt( scene, hand, joint ){
 	else hand.boltRotation = 0
 	mesh.rotation.y = hand.boltRotation
 	this.add( mesh )
-	
 
 
 
 
-	//  Ideally I’d like to use a PointLight here but that causes a 
+
+	//  Ideally I’d like to use a PointLight here but that causes a
 	//  severe drop in FPS!
 
 	// const light = new THREE.SpotLight( 0xFFFFFF )
@@ -71,7 +68,7 @@ function Bolt( scene, hand, joint ){
 
 	const fix = hand.handedness === 'right' ? 2 : -2
 
-	const tempY = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), Math.PI / fix )
+	const tempY = new Quaternion().setFromAxisAngle( new Vector3( 0, 1, 0 ), Math.PI / fix )
 	this.quaternion.multiply( tempY )
 
 
@@ -91,13 +88,13 @@ function Bolt( scene, hand, joint ){
 	// this.position.add( player.velocity )//  Quick fix.
 	// this.position.add( this.getWorldDirection( new THREE.Vector3() ).normalize().multiplyScalar( Bolt.shotLength / -2 ))
 	// this.position.add( this.getWorldDirection( new THREE.Vector3() ).normalize().multiplyScalar( Bolt.shotLength * -0.37 ))
-	this.position.add( this.getWorldDirection( new THREE.Vector3() ).normalize().multiplyScalar( Bolt.shotLength * -0.5 ))
+	this.position.add( this.getWorldDirection( new Vector3() ).normalize().multiplyScalar( Bolt.shotLength * -0.5 ))
 	this.scene = scene
 	scene.add( this )
 
 
 
-	// const temp = new THREE.Mesh( 
+	// const temp = new THREE.Mesh(
 
 	// 	new THREE.IcosahedronBufferGeometry( 0.1, 1 ),
 	// 	new THREE.MeshBasicMaterial({ color: 0x009900 })
@@ -112,7 +109,7 @@ function Bolt( scene, hand, joint ){
 	//  Probably a good idea if our bolt shoots in the correct
 	//  direction relative to the hand joint.
 
-	this.positionVelocity = this.getWorldDirection( new THREE.Vector3() ).normalize().multiplyScalar( -Bolt.speed )
+	this.positionVelocity = this.getWorldDirection( new Vector3() ).normalize().multiplyScalar( -Bolt.speed )
 	this.wait = 2
 
 	//  Oh, but what about our player’s velocity?!
@@ -120,14 +117,14 @@ function Bolt( scene, hand, joint ){
 	// this.positionVelocity.add( player.velocity )
 
 
-	this.positionInitial = new THREE.Vector3().copy( this.position )
+	this.positionInitial = new Vector3().copy( this.position )
 
 	// console.log( 'BANG! (Currently '+ Bolt.all.length +' bolts.)' )
-	const worldPosition = this.getWorldPosition( new THREE.Vector3() )
+	const worldPosition = this.getWorldPosition( new Vector3() )
 	// console.log( 'worldPosition', worldPosition )
 	// console.log( 'this (bolt)', this )
 }
-Bolt.prototype = Object.create( THREE.Object3D.prototype )
+Bolt.prototype = Object.create( Object3D.prototype )
 Bolt.prototype.constructor = Bolt
 // Bolt.prototype.wrap = wrap
 Bolt.prototype.update = function( timeDelta ){
@@ -145,10 +142,10 @@ Bolt.prototype.update = function( timeDelta ){
 	// 	const
 	// 	hit = intersections[ 0 ],
 	// 	obj = hit.object.parent
-		
+
 	// 	Bolt.destroy( this )
 	// 	if( obj instanceof Rock ){
-			
+
 	// 		obj.explode( this.positionVelocity.clone().multiplyScalar( 0.3 ), obj.parent.worldToLocal( hit.point ))
 
 
@@ -211,10 +208,10 @@ Bolt.prototype.update = function( timeDelta ){
 Bolt.all        =  []
 Bolt.speed      = 200//400//  Meters per second
 Bolt.shotLength =  20
-Bolt.geometry   = new THREE.CylinderGeometry( 0.06, 0.06, Bolt.shotLength, 7 )
+Bolt.geometry   = new CylinderGeometry( 0.06, 0.06, Bolt.shotLength, 7 )
 // Bolt.geometry   = new THREE.CylinderGeometry( 1, 1, Bolt.shotLength, 7 )
-Bolt.material   = new THREE.MeshBasicMaterial({ color: 0xFFFFFF })
-// Bolt.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3(), 0, settings.radiusWrap )
+Bolt.material   = new MeshBasicMaterial({ color: 0xFFFFFF })
+// Bolt.raycaster = new Raycaster( new THREE.Vector3(), new THREE.Vector3(), 0, settings.radiusWrap )
 
 
 Bolt.update = function( timeDelta ){
@@ -222,7 +219,7 @@ Bolt.update = function( timeDelta ){
 	//if( Mode.current.name === 'game play' ) Bolt.possibleTargets = Rock.all.concat( player )
 	// if( Mode.current.name === 'game play' ) Bolt.possibleTargets = Rock.all
 	// else Bolt.possibleTargets = Button.all
-	
+
 
 	Bolt.all.forEach( function( bolt ){ bolt.update( timeDelta ) })
 }

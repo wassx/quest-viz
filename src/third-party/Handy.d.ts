@@ -1,4 +1,4 @@
-import {Group, Object3D, Vector3} from "three";
+import {Group, Object3D, PerspectiveCamera, Vector3, XRInputSource} from "three";
 import {XRHandModel} from "../../third-party/Three/XRHandModelFactory";
 
 export interface Handy {
@@ -11,6 +11,12 @@ export interface Handy {
 
     isDigitTipIndex(): boolean;
     isFingerTipIndex(): boolean;
+    digitIsExtended(fingername: string): boolean;
+    digitIsContracted(fingername: string): boolean;
+    digitAngle(fingername: string): number;
+    reportDigits(): void;
+    checkHandedness(): string,
+    distanceBetweenJoints(jointNameA: string, jointNameB: string): number,
 
     shapes: {
         left: HandShape,
@@ -32,7 +38,21 @@ export interface XRHandy extends Group {
     handedness: string,
     isDefaultColor: boolean,
     joints: Group[],
+
+    isShape(gestureName: string, threshold: number): boolean,
     checkHandedness(): string,
+    // readLiveShapeData(): void,
+    // recordLiveShapeData(name: string, showIt: boolean): void,
+    // search(): string,
+    lastSearchResult: { name: string },
+    liveShapeData: [],
+
+    inputState: { pinching: boolean },
+
+
+    camera: PerspectiveCamera,
+    displayFrameAnchor: Object3D,
+    displayFrame: SurfaceText,
 }
 
 export interface ShapeChangedEvent {
@@ -47,7 +67,9 @@ export interface FirstShapeEvent extends Event {
 }
 
 export interface ConnectedEvent extends Event {
-    data: HandShape
+    type: "connected",
+    data: XRInputSource,
+    target: XRHandy
 }
 
 export interface HandShape {

@@ -1,8 +1,17 @@
-import {BufferGeometry, Color, Line, Scene, Vector3, WebGLRenderer, Group } from 'three';
+import {
+    BufferGeometry,
+    Color,
+    Line,
+    Scene,
+    Vector3,
+    WebGLRenderer,
+    Group,
+    Mesh, MeshBasicMaterial
+} from 'three';
 import {XRControllerModelFactory} from './third-party/Three/XRControllerModelFactory';
 import {GLTFLoader} from "./third-party/Three/GLTFLoader";
 import {XRHandModel, XRHandModelFactory} from "./third-party/Three/XRHandModelFactory";
-import {ConnectedEvent, FirstShapeEvent, Handy, XRHandy} from "./third-party/Handy";
+import {ConnectedEvent, FirstShapeEvent, Handy, ShapeChangedEvent, XRHandy} from "./third-party/Handy";
 
 export class Hands {
 
@@ -75,7 +84,7 @@ export class Hands {
         handModelFactory.setPath('./hands/');
 
         const cycleHandModel = (event: FirstShapeEvent) => {
-
+            debugger;
                 if (!event.hand) {
                     return;
                 }
@@ -131,13 +140,13 @@ export class Hands {
                     handModelFactory.createHandModel(hand, 'oculus', {model: 'lowpoly'}),
                     handModelFactory.createHandModel(hand, 'oculus')
                 ]
-                hand.modelIndex = 2
+                hand.modelIndex = 0;
 
 
                 //  This is what makes detecting hand shapes easy!
 
                 // @ts-ignore
-                Handy.makeHandy(hand)
+                Handy.makeHandy(hand);
 
 
                 //  When hand tracking data becomes available
@@ -145,13 +154,12 @@ export class Hands {
 
                 hand.addEventListener('connected', (event: ConnectedEvent) => {
 
-                    //console.log( 'Hand tracking has begun!', event )
-
+                    // console.log( 'Hand tracking has begun!', event );
 
                     //  As long as the handedness never changes (ha!)
                     //  this should do us right.
 
-                    hand.handedness = event.data.handedness
+                    hand.handedness = event.data.handedness;
 
 
                     //  When the hand joint data comes online
@@ -160,10 +168,10 @@ export class Hands {
 
                     hand.models.forEach((model: XRHandModel) => {
 
-                        hand.add(model)
-                        model.visible = false
-                    })
-                    hand.models[hand.modelIndex].visible = true
+                        hand.add(model);
+                        model.visible = false;
+                    });
+                    hand.models[hand.modelIndex].visible = true;
                 });
 
 
@@ -171,7 +179,7 @@ export class Hands {
                 //  to listen to our custom hand shapes.
                 //  Make a fist to change hand visual style.
 
-                hand.addEventListener('fist shape began', cycleHandModel)
+                hand.addEventListener('fist shape began', cycleHandModel);
 
 
                 //  Let’s trigger a glove color change
@@ -189,35 +197,35 @@ export class Hands {
                 //  The event.message property will display the “names” Array
                 //  for both the currently detected shape and the prior one.
 
-                // hand.addEventListener('shape changed', (event: ShapeChangedEvent) => {
-                //
-                //     // console.log( event.message )
-                //     if (event.resultIs.shape.names.includes('peace') &&
-                //         !event.resultWas.shape.names.includes('peace')) {
-                //
-                //         hand.checkHandedness()
-                //         hand.traverse(function (obj: XRJointSpace) {
-                //
-                //             if (obj.material) {
-                //
-                //
-                //                 //  Note this very terse conditional operator here.
-                //                 //  It’s made of a ‘?’ and ‘:’ and called a ternary operator:
-                //                 //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
-                //
-                //                 obj.material.color = hand.isDefaultColor ?
-                //                     colors[hand.handedness] :
-                //                     colors.default
-                //             }
-                //         })
-                //         hand.isDefaultColor = !hand.isDefaultColor
-                //     }
-                // })
+                hand.addEventListener('shape changed', (event: ShapeChangedEvent) => {
+debugger;
+                    console.log( event.message )
+                    if (event.resultIs.shape.names.includes('peace') &&
+                        !event.resultWas.shape.names.includes('peace')) {
+
+                        hand.checkHandedness()
+                        hand.traverse((obj: Mesh) => {
+
+                            if (obj.material) {
+
+
+                                //  Note this very terse conditional operator here.
+                                //  It’s made of a ‘?’ and ‘:’ and called a ternary operator:
+                                //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+
+                                (obj.material as MeshBasicMaterial).color = hand.isDefaultColor ?
+                                    colors[hand.handedness] :
+                                    colors.default
+                            }
+                        })
+                        hand.isDefaultColor = !hand.isDefaultColor
+                    }
+                })
 
 
                 //  We’re going to make our display frames vsible
 
-                // hand.displayFrame.visible = true
+                hand.displayFrame.visible = true
 
 
                 return hand

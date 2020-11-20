@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "ES6",
+    "target": "es2020",
     "declaration": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "lib": [
-      "ES6",
+      "ES7",
       "dom"
     ],
     "noImplicitAny": true,

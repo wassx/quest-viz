@@ -8,7 +8,7 @@
 //
 //  Want to add hand shape recognition to your WebXR project?
 //  Handy makes defining and using custom hand shapes a snap!
-//  Why use hand-held contollers when you can use your bare 
+//  Why use hand-held contollers when you can use your bare
 //  hands? 👋  Built on Three.js and tested on the Oculus Quest,
 //  Handy recognizes over 100 hand shapes right out of the box --
 //  including the American Sign Language (ASL) alphabet.
@@ -51,7 +51,7 @@ const Handy = {
 	//  Just ask for Handy.jointNames[ 7 ]
 	//  and you’ll get the value 'INDEX_PHALANX_INTERMEDIATE'.
 
-	//  We also use this Array to append constants directly 
+	//  We also use this Array to append constants directly
 	//  onto the Handy{} object like so:
 	//  Handy.INDEX_PHALANX_INTERMEDIATE === 7.
 	//  This exactly mirrors XRHand:
@@ -60,7 +60,7 @@ const Handy = {
 	jointNames: [
 
 		'WRIST',                      //   0
-		
+
 		'THUMB_METACARPAL',           //   1
 		'THUMB_PHALANX_PROXIMAL',     //   2
 		'THUMB_PHALANX_DISTAL',       //   3
@@ -218,7 +218,7 @@ const Handy = {
 
 
 		//  We need to find the THREE camera used for this scene
-		//  in order to have our data display frames 
+		//  in order to have our data display frames
 		//  always lookAt() the camera.
 		//  In the future we might need this to be more robust
 		//  or just pass in the intended camera via update().
@@ -239,7 +239,7 @@ const Handy = {
 		})
 
 
-		//  Let’s create a means for displaying 
+		//  Let’s create a means for displaying
 		//  hand and finger data right in VR!
 		//  SurfaceText returns a THREE.Mesh
 		//  with additional methods like print().
@@ -313,14 +313,14 @@ Object.assign( Handy.hands, {
 
 	getLeft: function(){
 
-		return this.find( function( hand ){ 
+		return this.find( function( hand ){
 
 			return hand.handedness === 'left'
 		})
 	},
 	getRight: function(){
 
-		return this.find( function( hand ){ 
+		return this.find( function( hand ){
 
 			return hand.handedness === 'right'
 		})
@@ -383,7 +383,7 @@ Object.assign( Handy.protos, {
 	//
 	//          'index phalanx tip',
 	// 		    'thumb phalanx tip'
-	//	
+	//
 	//       ) < 3
 	//
 	//  Easy, right?! Now you can write your own! :)
@@ -397,13 +397,13 @@ Object.assign( Handy.protos, {
 		[ jointA, jointB ] = [ jointNameA, jointNameB ]
 		.map( function( name ){
 
-			return hand.joints[ 
+			return hand.joints[
 
 				Handy[ name.toUpperCase().replace( /\s+/g, '_' )]
 			]
 		})
 
-		if( jointA.position && 
+		if( jointA.position &&
 			jointB.position &&
 			( !jointA.position.equals( jointB.position ))){
 
@@ -417,7 +417,7 @@ Object.assign( Handy.protos, {
 	//  Here’s how to check if your index finger is extended:
 	//
 	//      return this.digitAngle( 'index' ) < 20
-	//  
+	//
 	//  Not bad, eh?
 
 	digitAngle: function( fingerName ){
@@ -428,8 +428,8 @@ Object.assign( Handy.protos, {
 		fingerTip = this.joints[ Handy[ fingerName +'_PHALANX_TIP' ]],
 		fingerProximal = this.joints[ Handy[ fingerName +'_PHALANX_PROXIMAL' ]]
 
-		if( fingerTip && 
-			fingerProximal && 
+		if( fingerTip &&
+			fingerProximal &&
 			fingerTip.quaternion &&
 			fingerProximal.quaternion ){
 
@@ -457,7 +457,7 @@ Object.assign( Handy.protos, {
 	},
 
 
-	//  Useful for assessing 
+	//  Useful for assessing
 	//  what values you may want to use
 	//  in your detection functions.
 
@@ -467,7 +467,7 @@ Object.assign( Handy.protos, {
 		Handy.digitNames
 		.forEach( function( digitName ){
 
-			const 
+			const
 			distance = hand.distanceBetweenJoints(
 
 				digitName +' phalanx proximal',
@@ -475,15 +475,15 @@ Object.assign( Handy.protos, {
 			),
 			digitAngle = hand.digitAngle( digitName )
 
-			console.log( 
+			console.log(
 
-				hand.handedness, 
-				digitName, 
+				hand.handedness,
+				digitName,
 				'angle (˚)',
 				Math.round( digitAngle ),
 				'distance (cm)',
 				Math.round( distance * 10 ) / 10,
-				'isExtended?', 
+				'isExtended?',
 				//hand[ digitName.toLowerCase() +'IsExtended' ],
 				hand.digitIsExtended( digitName ),
 				'isContracted?',
@@ -509,7 +509,7 @@ Object.assign( Handy.protos, {
 
 	readLiveShapeData: function(){
 
-		const 
+		const
 		hand  = this,
 		wrist = hand.joints[ 0 ],
 		jointPositions    = [],
@@ -527,15 +527,15 @@ Object.assign( Handy.protos, {
 
 		preparePosition = function( joint ){
 
-			const 
+			const
 			jointMatrix = joint.matrix
 			.clone()
-			.premultiply( 
+			.premultiply(
 
 				new Matrix4().getInverse( wrist.matrixWorld )
 			)
 
-			return [ 
+			return [
 
 				Math.round( jointMatrix.elements[ 12 ] * 1000 ),
 				Math.round( jointMatrix.elements[ 13 ] * 1000 ),
@@ -544,25 +544,25 @@ Object.assign( Handy.protos, {
 		},
 
 
-		//  Store head (camera) position relative to the wrist. 
+		//  Store head (camera) position relative to the wrist.
 		//  In the future we’ll use this to identify hand gestures
 		//  that relate to the position of the head / body.
 
 		//  NOTE: Camera position is unreliable because of XR camera rig.
 		//  Need to come back and investigate alternatives.
 
-		headPosition = 
+		headPosition =
 			wrist !== undefined && !wrist.position.equals( Handy.VECTOR3_ZERO )
 			? preparePosition( hand.camera )
 			: null,
-		headRotation = 
+		headRotation =
 			headPosition === null
 			? null
 			: hand.camera.quaternion.toArray()
 
 
 		//  Store the positions of each joint relative to the wrist.
-		//  Note that if a position is not “ready” 
+		//  Note that if a position is not “ready”
 		//  then that entry in the Array will be undefined.
 		//  This is important during shape detection:
 		//  Undefined elements will NOT accrue “distance”, ie.
@@ -589,7 +589,7 @@ Object.assign( Handy.protos, {
 
 		//  Package it up and send it off.
 
-		return { 
+		return {
 
 			headPosition,
 			headRotation,
@@ -607,20 +607,20 @@ Object.assign( Handy.protos, {
 
 	recordLiveShape: function( name, showIt ){
 
-		const 
+		const
 		hand = this,
 		handedness = hand.checkHandedness(),
 		shape = Object.assign(
 
 			{
 				names: [ name ],
-				handedness,				
+				handedness,
 				handyRevision: Handy.REVISION,
 				time: Date.now()
 			},
 			hand.readLiveShapeData()
 		)
-		
+
 		console.log( '\n\nSHAPE DEFINITION\n\n'+ JSON.stringify( shape ) +',\n\n\n' )
 		Handy.shapes[ handedness ].push( shape )
 		if( showIt ) hand.showShape( shape, hand.joints[ 0 ].matrixWorld )
@@ -629,7 +629,7 @@ Object.assign( Handy.protos, {
 
 
 	//  Did your shape record correctly just now?
-	//  This is a quick and dirty way to see 
+	//  This is a quick and dirty way to see
 	// (within XR!) if it’s roughly correct.
 
 	showShape: function( shape, matrix ){
@@ -649,7 +649,7 @@ Object.assign( Handy.protos, {
 			)
 			box.position.fromArray( position ).multiplyScalar( 0.001 )
 			if( matrix !== undefined ){
-			
+
 				box.updateMatrix()
 				box.matrix.multiply( matrix )
 			}
@@ -671,7 +671,7 @@ Object.assign( Handy.protos, {
 		const
 		hand  = this,
 		shape = Handy.shapes[ hand.handedness ]
-		.find( function( shape ){ 
+		.find( function( shape ){
 
 			return shape.names.includes( shapeName )
 		})
@@ -714,8 +714,8 @@ Object.assign( Handy.protos, {
 	lastSearchResult: { name: 'null' },
 
 	search: function(){
-		
-		const 
+
+		const
 		hand   = this,
 		handedness = hand.checkHandedness(),
 		shapes = Handy.shapes[ handedness ],
@@ -743,13 +743,13 @@ Object.assign( Handy.protos, {
 		//  https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API
 
 		hand.searchLoopBeganAt = window.performance.now()
-		for( let 
-			
-			i = hand.searchShapeIndex; 
-			i < shapes.length; 
-			i ++ 
+		for( let
+
+			i = hand.searchShapeIndex;
+			i < shapes.length;
+			i ++
 		){
-		
+
 
 			//  If we’re just beginning a new search
 			//  we need to reset our results buffer
@@ -763,12 +763,12 @@ Object.assign( Handy.protos, {
 
 
 				//  If there’s no joint position data
-				//  or if the wrist position of this hand is EXACTLY zero 
+				//  or if the wrist position of this hand is EXACTLY zero
 				// (in which case it’s likely ALL joint positions are zero)
 				//  then this live data is useless. (So bail!)
 
 				if( hand.liveShapeData.jointPositions.length === 0 ||
-					( 
+					(
 						hand.liveShapeData.jointPositions[ 0 ][ 0 ] === 0 &&
 						hand.liveShapeData.jointPositions[ 0 ][ 1 ] === 0 &&
 						hand.liveShapeData.jointPositions[ 0 ][ 2 ] === 0
@@ -778,16 +778,16 @@ Object.assign( Handy.protos, {
 				}
 
 
-				//  These flags assert that we are 
+				//  These flags assert that we are
 				//  NOT taking the square root of each distance.
 				//  As this might change in the future
 				//  I wanted a way for you to query / write logic
 				//  around that.
-				
+
 				hand.searchResultsBuffer.distancesAreSquared = true
 				hand.searchResultsBuffer.distancesAreRooted  = false
 			}
-	
+
 
 			//  Go about our normal business.
 			//  eg, evaluate the distance between this hand shape
@@ -802,17 +802,17 @@ Object.assign( Handy.protos, {
 			//  weren’t sufficient once we added all of ASL.)
 			//  We may eventually remove this digitTipPositions method
 			//  as [all] jointPositions is obviously more accurate
-			//  and seems speedy enough. 
+			//  and seems speedy enough.
 
 			if( method === 'digitTipPositions' ){
-				
+
 				hand.searchResultsBuffer.push({
 
 					shape,
 					distance: shape.digitTipPositions
 					.reduce( function( distance, digitTipPosition, i ){
 
-						if( digitTipPosition.length !== undefined && 
+						if( digitTipPosition.length !== undefined &&
 							hand.liveShapeData.digitTipPositions[ i ] !== undefined &&
 							hand.liveShapeData.digitTipPositions[ i ].length > 0 ){
 
@@ -842,7 +842,7 @@ Object.assign( Handy.protos, {
 					distance: shape.jointPositions
 					.reduce( function( distance, jointPosition, i ){
 
-						if( jointPosition.length !== undefined && 
+						if( jointPosition.length !== undefined &&
 							hand.liveShapeData.jointPositions[ i ] !== undefined &&
 							hand.liveShapeData.jointPositions[ i ].length > 0 ){
 
@@ -907,22 +907,21 @@ Object.assign( Handy.protos, {
 						//  and only concerned with recognizing “peace”
 						//  ought to have that convenience.
 						// (And the other way ’round as well!)
-
 						hand.lastSearchResult.shape.names
 						.forEach( function( shapeName ){
 
 							hand.dispatchEvent({
 
-								type: shapeName +' shape ended', 
+								type: shapeName +' shape ended',
 								hand,
 								shape:    hand.lastSearchResult.shape,
-								
+
 
 								//  Open question here:
 								//  Should this “distance” property be from this shape’s
 								//  previous top-result status (as it is currently)
 								//  or should it be from its new not-top-result status?
-	
+
 								distance: hand.lastSearchResult.distance,
 								message:  hand.handedness.toUpperCase() +
 									' hand “'+ shapeName +'” shape ended'+
@@ -930,32 +929,32 @@ Object.assign( Handy.protos, {
 							})
 						})
 
-						
-						//  Should you need it, 
+
+						//  Should you need it,
 						//  here’s an easy way to get a “from / to” alert.
 						//  NOTE: Do we need to include distances in here too?
 
 						hand.dispatchEvent({
 
-							type: 'shape changed', 
+							type: 'shape changed',
 							hand,
 							resultWas: hand.lastSearchResult,
 							resultIs:  searchResult,
 							message:   hand.handedness.toUpperCase() +
-								' hand shape changed from '+ 
+								' hand shape changed from '+
 								JSON.stringify( hand.lastSearchResult.shape.names ) +
-								' to '+ 
+								' to '+
 								JSON.stringify( searchResult.shape.names ) +'.'
 						})
 					}
-					
+
 
 					searchResult.shape.names
 					.forEach( function( shapeName ){
 
 						hand.dispatchEvent({
 
-							type: shapeName +' shape began', 
+							type: shapeName +' shape began',
 							hand,
 							shape:    searchResult.shape,
 							distance: searchResult.distance,
@@ -967,7 +966,7 @@ Object.assign( Handy.protos, {
 
 
 					//  We’re ready to make it final.
-					//  Replace the prior searh result 
+					//  Replace the prior searh result
 					//  with the current search result.
 
 					hand.lastSearchResult = searchResult
@@ -976,7 +975,7 @@ Object.assign( Handy.protos, {
 
 					// console.log( 'Same handshape as last time' )
 				}
-				
+
 
 				//  Get things ready for next search.
 
@@ -984,14 +983,14 @@ Object.assign( Handy.protos, {
 				hand.searchResultsBuffer = []
 
 
-				//  Bail both from this local “for” loop 
+				//  Bail both from this local “for” loop
 				//  and from this entire function.
 
 				return searchResult
 			}
 
-		
-			//  If we’re not done with our search, 
+
+			//  If we’re not done with our search,
 			//  check if this search is taking too long per update() loop.
 
 			else {
@@ -1001,8 +1000,8 @@ Object.assign( Handy.protos, {
 				//  let’s note what index we should start at next time
 				//  and bail for now.
 
-				if( window.performance.now() 
-					- hand.searchLoopBeganAt 
+				if( window.performance.now()
+					- hand.searchLoopBeganAt
 					> Handy.searchLoopDurationLimit ){
 
 					hand.findShapeIndex = i + 1
@@ -1015,7 +1014,7 @@ Object.assign( Handy.protos, {
 
 	//  If the shape is the top search result
 	// (or it’s in the results list above a given distance threshold)
-	//  return the result itself so it includes 
+	//  return the result itself so it includes
 	//  all of the shape data as well as distance.
 	//  Otherwise return false.
 
@@ -1028,9 +1027,9 @@ Object.assign( Handy.protos, {
 
 		const hand = this
 		if( typeof threshold === 'number' ){
-			
+
 			const result = hand.searchResults
-			.find( function( result ){ 
+			.find( function( result ){
 
 				return (
 
@@ -1056,37 +1055,37 @@ Object.assign( Handy.protos, {
 
 	compareShapes: function( shapeAName, shapeBName ){
 
-		const 
+		const
 		hand = this,
 		shapesList = Handy.shapes[ hand.handedness ],
 		shapeA = shapesList.find( function( shape ){ return shape.name === shapeAName }),
 		shapeB = shapesList.find( function( shape ){ return shape.name === shapeBName })
-		
+
 		let
 		shapeDistanceAbs = 0,
 		shapeDistanceSqr = 0
 
 		for( let i = 0; i < shapeA.positions.length; i ++ ){
 
-			const 
+			const
 			positionA = shapeA.positions[ i ],
 			positionB = shapeB.positions[ i ],
-			jointDistanceAbs = 
+			jointDistanceAbs =
 				Math.abs( positionA[ 0 ] - positionB[ 0 ]) +
 				Math.abs( positionA[ 1 ] - positionB[ 1 ]) +
 				Math.abs( positionA[ 2 ] - positionB[ 2 ]),
 			jointDistanceSqr = Math.sqrt(
-				
+
 				Math.pow( positionA[ 0 ] - positionB[ 0 ], 2 ) +
 				Math.pow( positionA[ 1 ] - positionB[ 1 ], 2 ) +
 				Math.pow( positionA[ 2 ] - positionB[ 2 ], 2 )
 			)
-			
-			// console.log( 
 
-			// 	'i', i, 
-			// 	'\n', positionA, 
-			// 	'\n', positionB, 
+			// console.log(
+
+			// 	'i', i,
+			// 	'\n', positionA,
+			// 	'\n', positionB,
 			// 	'\nSqr distance:', jointDistanceSqr,
 			// 	'\nAbs distance:', jointDistanceAbs,
 			// )
@@ -1094,32 +1093,32 @@ Object.assign( Handy.protos, {
 			shapeDistanceAbs += jointDistanceAbs
 			shapeDistanceSqr += jointDistanceSqr
 		}
-		console.log( 
+		console.log(
 
-			'\nThe distance between', shapeAName, 'and', shapeBName, 'is', 
-			'\nAbs:', shapeDistanceAbs, 
-			'\nSqr:', shapeDistanceSqr, 
+			'\nThe distance between', shapeAName, 'and', shapeBName, 'is',
+			'\nAbs:', shapeDistanceAbs,
+			'\nSqr:', shapeDistanceSqr,
 			'\n\n'
 		)
 		return shapeDistanceSqr
 	},
 	compareAllTo: function( inputShape ){
-		
+
 		const
 		hand = this,
 		shapesList = Handy.shapes[ hand.handedness ]
 
 		return shapesList
-		.reduce( function( list, shape ){ 
+		.reduce( function( list, shape ){
 
-			return list.concat({ 
+			return list.concat({
 
-				name: shape.name, 
+				name: shape.name,
 				distance: hands.left.compareShapes( 'Fist', shape.name )
 			})
 
 		}, [])
-		.sort( function( a, b ){ 
+		.sort( function( a, b ){
 
 			return a.distance - b.distance
 		})
@@ -1139,8 +1138,8 @@ Object.assign( Handy.protos, {
 
 	//  Did you add a shape name to the Handy.shapeNames Array?
 	//  Did you also define a check function for it?
-	//  If so, this function -- which you must remember to call 
-	//  from within your update loop -- will check the status 
+	//  If so, this function -- which you must remember to call
+	//  from within your update loop -- will check the status
 	//  of each shape, set the boolean flags accordingly,
 	//  and fire off events on the frame when the state changes.
 
@@ -1149,11 +1148,11 @@ Object.assign( Handy.protos, {
 		const hand = this
 
 
-		//  If we’re displaying hand shape + finger data 
+		//  If we’re displaying hand shape + finger data
 		// (angle˚, distance, isExtended, isContracted)
 		//  and there is existing joint data to use...
 
-		if( hand.displayFrame.visible === true && 
+		if( hand.displayFrame.visible === true &&
 			hand.joints[ 0 ] &&
 			hand.joints[ 0 ].position ){
 
@@ -1165,7 +1164,7 @@ Object.assign( Handy.protos, {
 			//  TO DO:
 			//  displayFrame should actually ORBIT the wrist at a fixed radius
 			//  and always choose the orbit degree that faces the camera.
-			
+
 
 			let handedness = hand.handedness
 			if( handedness === 'left' || handedness === 'right' ){
@@ -1212,7 +1211,7 @@ Object.assign( Handy.protos, {
 
 
 		//  Are we supposed to do something?
-		
+
 		if( typeof callback === 'function' ) callback( hand )
 	}
 })
@@ -1234,11 +1233,11 @@ export { Handy }
 	 For my entire life I’ve been attracted to the stimulus
 	 of my eyes and ears; the visual and musical arts.
 	 I’ve made a lot of output to reflect that attraction.
-	 On rare occasions I’ve been forced to confront the 
+	 On rare occasions I’ve been forced to confront the
 	 fact that some human bodies function differently than
 	 others -- for example a friend of mine who couldn’t enjoy
 	(or couldn’t NOT enjoy!) my early stereoscopic experiments
-	 because his eyes and brain do not synthesize stereoscopic 
+	 because his eyes and brain do not synthesize stereoscopic
 	 depth from his two monoscopic inputs. I don’t know how
 	 to rectify my passion (and monetization) of the aural
 	 and the visual within these contexts. Do I need to?
@@ -1249,9 +1248,9 @@ export { Handy }
 	 The wonder I experience at traversing the threshold from the
 	 physical world to the virtual world and “seeing myself”
 	 from a first-person perspective as I hold out my hands...
-	 That is not a universal experience. I’m not sure where to go 
-	 from here but let’s make sure our wonderful XR community is 
-	 having this conversation, eh? 
+	 That is not a universal experience. I’m not sure where to go
+	 from here but let’s make sure our wonderful XR community is
+	 having this conversation, eh?
 
 
 	 Stewart Smith
