@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 import {
-    ACESFilmicToneMapping,
+    ACESFilmicToneMapping, BoxBufferGeometry, Mesh, MeshBasicMaterial,
     PCFSoftShadowMap,
     PerspectiveCamera,
     Scene,
@@ -23,6 +23,7 @@ export class Main {
     renderer: WebGLRenderer;
     orbitControls: OrbitControls;
     laserCooked: LaserCooked;
+    grabable: Mesh;
 
     setupThree(): void {
         const container = document.getElementById('three')
@@ -70,6 +71,22 @@ export class Main {
         let laserBeam = new LaserBeam();
         this.scene.add(laserBeam);
         this.laserCooked = new LaserCooked(laserBeam, this.scene);
+
+
+        this.grabable = new Mesh(
+            new BoxBufferGeometry(0.5, 0.5, 0.5),
+            new MeshBasicMaterial({
+                color: 0xff0066,
+                wireframe: true
+            })
+        )
+        this.grabable.position.x = 1
+        this.grabable.position.y = 1
+        this.grabable.position.z = 1
+
+
+        this.scene.add(this.grabable);
+
     }
 
 
@@ -82,16 +99,28 @@ let timePrevious: number;
 const loop = (timeNow: number, frame?: XRFrame): void => {
     // @ts-ignore
     Handy.update((hand: XRHandy) => {
-        if( hand.isShape( 'fire point', 3000 )){
+
+        if( hand.isShape( 'asl s', 3000 )){
+
+            hand.joints[0].add(main.grabable);
 
             if(main.laserCooked) {
-                main.laserCooked.beam.matrixWorld.setPosition(hand.position);
+                main.laserCooked.beam.visible = true;
+                // main.laserCooked.beam.parent = main.renderer.xr.getControllerGrip(0);
+                // console.log("laser visible");
+                hand.joints[10].add(main.laserCooked.beam);
             }
 
+        } else {
+            // if(main.laserCooked) {
+            //     main.laserCooked.beam.visible = false;
+            //     main.laserCooked.beam.parent = null;
+            //     console.log("laser hidden");
+            // }
         }
     });
 
-    main.laserCooked.update();
+    // main.laserCooked.update();
     main.renderer.render(main.scene, main.camera);
 }
 

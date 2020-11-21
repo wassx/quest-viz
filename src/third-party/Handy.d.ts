@@ -1,4 +1,4 @@
-import {Group, Object3D, PerspectiveCamera, Vector3, XRInputSource} from "three";
+import {Group, Object3D, PerspectiveCamera, Vector3, XRHandedness, XRInputSource} from "three";
 import {XRHandModel} from "../../third-party/Three/XRHandModelFactory";
 
 export interface Handy {
@@ -15,7 +15,7 @@ export interface Handy {
     digitIsContracted(fingername: string): boolean;
     digitAngle(fingername: string): number;
     reportDigits(): void;
-    checkHandedness(): string,
+    checkHandedness(): XRHandedness,
     distanceBetweenJoints(jointNameA: string, jointNameB: string): number,
 
     shapes: {

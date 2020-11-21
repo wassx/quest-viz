@@ -1026,6 +1026,7 @@ Object.assign( Handy.protos, {
 	isShape: function( shapeName, threshold ){
 
 		const hand = this
+
 		if( typeof threshold === 'number' ){
 
 			const result = hand.searchResults
